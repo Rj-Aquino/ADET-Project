@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>🔍 Research Paper Search Results</h1>
+    <hr>
+
+    {% if results %}
+        <h2>📚 Search Results for "{{ query }}"</h2>
+        
+        <ul>
+            {% for result in results %}
+                <li>
+                    <h3>{{ result.title }}</h3>
+                    
+                    {% if result.source == "EXA" %}
+                        <p><strong>Source:</strong> EXA</p>
+                        <p><strong>🔗 URL:</strong> <a href="{{ result.url }}" target="_blank">View Paper</a></p>
+                    {% elif result.source == "Pinecone" %}
+                        <p><strong>Source:</strong> Pinecone</p>
+                        
+                        {% if result.abstract %}
+                            <p><strong>🔹 Abstract:</strong> {{ result.abstract }}</p>
+                        {% endif %}
+                        
+                        {% if result.authors %}
+                            <p><strong>🔹 Authors:</strong> {{ result.authors }}</p>
+                        {% endif %}
+
+                        {% if result.year %}
+                        <p><strong>🔹 Year:</strong> {{ result.year }}</p>
+                        {% endif %}
+
+                    {% endif %}
+                    
+                    {% if result.source == "Pinecone" %}
+                    <p><strong>🔹 Similarity Score:</strong> {{ result.score }}</p>
+                    {% endif %}
+
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+
+</body>
+</html>
