@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import SearchForm
 from .search import enhanced_search  # Assuming you have a search.py file with enhanced_search function
 from .models import UserInput, ResearchPaper
+from django.core.paginator import Paginator
 
 # Home view to display the search form
 def home(request):
@@ -36,3 +37,33 @@ def save_results_to_db(query_text, results):
             source=result.get('source')
         )
     return user_input
+
+def input_recommendations_view(request):
+    # Ensure the query always fetches the latest data
+    inputs = UserInput.objects.all().order_by('-created_at')  # Order by creation time (newest first)
+
+    # Create a paginator object for the inputs
+    paginator = Paginator(inputs, 1)  # Show 1 inputs per page
+    page_number = request.GET.get('page')  # Get the current page number from the GET request
+    page_obj = paginator.get_page(page_number)  # Get the current page
+
+    # Create an empty list to store inputs and their recommendations
+    input_recommendations = []
+
+    # Loop through each user input on the current page and get corresponding recommendations from the database
+    for user_input in page_obj:
+        # Get the recommendations from the ResearchPaper model that correspond to the current user_input
+        recommendations = ResearchPaper.objects.filter(input=user_input)
+
+        # Add the input and its corresponding recommendations to the list
+        input_recommendations.append({
+            'user_input': user_input,
+            'recommendations': recommendations
+        })
+
+    # Render the template with input_recommendations context and pagination info
+    return render(request, 'recommendation_system/inputs_recommendations.html', {
+        'input_recommendations': input_recommendations,
+        'page_obj': page_obj  # Pass the pagination object to the template
+    })
+
