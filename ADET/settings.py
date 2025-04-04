@@ -78,7 +78,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',          # same as in DBeaver
+        'NAME': 'ADET-Project',          # same as in DBeaver
         'USER': 'postgres',    # usually 'postgres'
         'PASSWORD': 'password',
         'HOST': 'localhost',             # or the IP if it's remote

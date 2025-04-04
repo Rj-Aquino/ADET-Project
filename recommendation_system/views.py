@@ -3,6 +3,8 @@ from .forms import SearchForm
 from .search import enhanced_search  # Assuming you have a search.py file with enhanced_search function
 from .models import UserInput, ResearchPaper
 from django.core.paginator import Paginator
+from django.db.models.functions import Replace  # Add this import
+from django.db.models import Value  # Add this import
 
 # Home view to display the search form
 def home(request):
@@ -14,11 +16,25 @@ def search_view(request):
     results = []
 
     if query:
-        # Perform the search if there's a query
-        results = enhanced_search(query)
+        # Normalize the query: remove ALL whitespace and convert to lowercase
+        normalized_query = ''.join(query.split()).lower()
+        print(f"Normalized Query: {normalized_query}")
 
-        # ✅ Save results to the database
-        save_results_to_db(query, results)
+        # Try to find a matching UserInput (compare normalized versions)
+        try:
+            user_input = UserInput.objects.annotate(
+                normalized_text=Replace('query_text', Value(' '), Value(''))
+            ).get(normalized_text__iexact=normalized_query)
+        except UserInput.DoesNotExist:
+            user_input = None
+
+        if user_input:
+            # If match found, fetch its recommendations
+            results = user_input.recommendations.all()
+        else:
+            # If no match, perform a new search and save results
+            results = enhanced_search(query)
+            save_results_to_db(query, results)
 
     return render(request, 'recommendation_system/results.html', {'results': results, 'query': query})
 
