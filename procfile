@@ -1,3 +1,1 @@
-web: gunicorn recommendation_system.wsgi --log-file - 
-#or works good with external database
-web: python manage.py migrate && gunicorn project_name.wsgi
+web: gunicorn ADET.wsgi --bind 0.0.0.0:$PORT --log-file -
