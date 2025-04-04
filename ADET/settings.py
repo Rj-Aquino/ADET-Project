@@ -23,9 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_9*0@zv#ia)d#d!=&s*%hl_&=$nzj3l_tjzmp)o$186x8-6z_5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+DEBUG = True  # Disable debug mode in production!
+ALLOWED_HOSTS = ["your-app.up.railway.app", "localhost", 
+                 "127.0.0.1"]  # Add Railway's URL
+CSRF_TRUSTED_ORIGINS = ["https://your-app.up.railway.app"]  # For HTTPS security
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Force HTTPS
 
 STATIC_URL = '/static/'
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,13 +80,22 @@ WSGI_APPLICATION = 'ADET.wsgi.application'
 
 DATABASES = {
 
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'ADET-Project',          # same as in DBeaver
+    #     'USER': 'postgres',    # usually 'postgres'
+    #     'PASSWORD': 'password',
+    #     'HOST': 'localhost',             # or the IP if it's remote
+    #     'PORT': '5432',                  # default PostgreSQL port
+    # }
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ADET-Project',          # same as in DBeaver
-        'USER': 'postgres',    # usually 'postgres'
-        'PASSWORD': 'password',
-        'HOST': 'localhost',             # or the IP if it's remote
-        'PORT': '5432',                  # default PostgreSQL port
+        'NAME': "railway",     # Railway provides this
+        'USER': "postgres",         # Railway provides this
+        'PASSWORD': "bBNuODwqJaAtyCFsLHvEnIDRWQZTDipb",  # Railway provides this
+        'HOST': "yamabiko.proxy.rlwy.net",         # Railway provides this
+        'PORT': "19259",         # Railway provides this
     }
 }
 
@@ -126,3 +139,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
