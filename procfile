@@ -1,2 +1,2 @@
-web: gunicorn ADET.wsgi --bind 0.0.0.0:$PORT --log-file -
+web: gunicorn ADET.wsgi --bind 0.0.0.0:$PORT --workers 2 --timeout 120
 release: python manage.py migrate
