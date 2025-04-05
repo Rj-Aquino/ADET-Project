@@ -25,10 +25,16 @@ SECRET_KEY = 'django-insecure-_9*0@zv#ia)d#d!=&s*%hl_&=$nzj3l_tjzmp)o$186x8-6z_5
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = False  # Disable debug mode in production!
-ALLOWED_HOSTS = ["your-app.up.railway.app", "localhost",
-                "https://adet-project-production.up.railway.app", 
-                 "127.0.0.1"]  # Add Railway's URL
-CSRF_TRUSTED_ORIGINS = ["https://your-app.up.railway.app"]  # For HTTPS security
+ALLOWED_HOSTS = [
+    "adet-project-production.up.railway.app",  # ✅ Your Railway domain
+    "localhost",
+    "127.0.0.1"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://adet-project-production.up.railway.app"
+]
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Force HTTPS
 
 STATIC_URL = '/static/'
@@ -143,4 +149,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
