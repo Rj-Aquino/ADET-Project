@@ -5,6 +5,13 @@ from .models import UserInput, ResearchPaper
 from django.core.paginator import Paginator
 from django.db.models.functions import Replace  # Add this import
 from django.db.models import Value  # Add this import
+import requests
+from django.http import JsonResponse
+from gradio_client import Client
+from django.shortcuts import render
+from .models import UserInput
+from dotenv import load_dotenv
+import os
 
 # Home view to display the search form
 def home(request):
@@ -32,8 +39,20 @@ def search_view(request):
             # If match found, fetch its recommendations
             results = user_input.recommendations.all()
         else:
+
+            # Load environment variables from the .env file
+            load_dotenv()
+
+            # Retrieve the API token from the environment
+            api_token = os.getenv("API_TOKEN")
+
             # If no match, perform a new search and save results
-            results = enhanced_search(query)
+            # Call the Gradio API here
+            client = Client("NalZero/ADET", api_token=api_token)
+            result = client.predict(query_text=query, api_name="/predict")  # Specify the correct API endpoint
+
+            # Handle the result
+            results = result  # Assuming the result is a list or dictionary, adapt accordingly
             save_results_to_db(query, results)
 
     return render(request, 'recommendation_system/results.html', {'results': results, 'query': query})
