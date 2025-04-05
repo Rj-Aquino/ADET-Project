@@ -39,20 +39,48 @@ def search_view(request):
             # If match found, fetch its recommendations
             results = user_input.recommendations.all()
         else:
-
             # Load environment variables from the .env file
             load_dotenv()
 
             # Retrieve the API token from the environment
             api_token = os.getenv("API_TOKEN")
 
-            # If no match, perform a new search and save results
-            # Call the Gradio API here
-            client = Client("NalZero/ADET", api_token=api_token)
-            result = client.predict(query_text=query, api_name="/predict")  # Specify the correct API endpoint
+            # Make the first POST request to get the event_id
+            url = "https://nalzero-adet.hf.space/gradio_api/call/predict"
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+            }
+            payload = {
+                "data": [
+                    {
+                        "query_text": query
+                    }
+                ]
+            }
 
-            # Handle the result
-            results = result  # Assuming the result is a list or dictionary, adapt accordingly
+            response = requests.post(url, headers=headers, json=payload)
+
+            if response.status_code == 200:
+                # Get the event_id from the response
+                event_id = response.json().get("event_id")
+
+                if event_id:
+                    # Now make a GET request with the event_id
+                    get_url = f"https://nalzero-adet.hf.space/gradio_api/call/predict/{event_id}"
+                    get_response = requests.get(get_url, headers=headers)
+
+                    if get_response.status_code == 200:
+                        # Process the prediction result from the GET request
+                        results = get_response.json().get('data', [])
+                    else:
+                        print(f"Failed to get results: {get_response.text}")
+                else:
+                    print("No event_id returned.")
+            else:
+                print(f"POST request failed: {response.text}")
+
+            # Optionally, save the results to the database
             save_results_to_db(query, results)
 
     return render(request, 'recommendation_system/results.html', {'results': results, 'query': query})
