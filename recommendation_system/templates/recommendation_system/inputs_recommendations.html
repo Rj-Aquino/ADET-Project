@@ -85,12 +85,12 @@
                                     <p><strong>Abstract:</strong> {{ recommendation.abstract }}</p>
                                 {% endif %}
 
-                                {% if result.authors %}
-                                <p><strong>🔹 Authors:</strong> {{ result.authors }}</p>
+                                {% if recommendation.authors %}
+                                <p><strong>🔹 Authors:</strong> {{ recommendation.authors }}</p>
                                 {% endif %}
             
-                                {% if result.year %}
-                                <p><strong>🔹 Year:</strong> {{ result.year }}</p>
+                                {% if recommendation.year %}
+                                <p><strong>🔹 Year:</strong> {{ recommendation.year }}</p>
                                 {% endif %}
             
                                 {% if recommendation.source == "Pinecone" %}
