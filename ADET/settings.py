@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-_9*0@zv#ia)d#d!=&s*%hl_&=$nzj3l_tjzmp)o$186x8-6z_5
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = False  # Disable debug mode in production!
+DEBUG = True  # Disable debug mode in production!
 ALLOWED_HOSTS = [
     "adet-project-production.up.railway.app",  # ✅ Your Railway domain
     "localhost",

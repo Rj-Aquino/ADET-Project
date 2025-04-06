@@ -1,17 +1,18 @@
 from django.shortcuts import render
 from .forms import SearchForm
-from .search import enhanced_search  # Assuming you have a search.py file with enhanced_search function
+#from .search import enhanced_search  # Assuming you have a search.py file with enhanced_search function
 from .models import UserInput, ResearchPaper
 from django.core.paginator import Paginator
 from django.db.models.functions import Replace  # Add this import
 from django.db.models import Value  # Add this import
+from django.db.models.functions import Replace
 import requests
-from django.http import JsonResponse
-from gradio_client import Client
 from django.shortcuts import render
-from .models import UserInput
 from dotenv import load_dotenv
 import os
+import time
+import json
+import ast
 
 # Home view to display the search form
 def home(request):
@@ -25,7 +26,6 @@ def search_view(request):
     if query:
         # Normalize the query: remove ALL whitespace and convert to lowercase
         normalized_query = ''.join(query.split()).lower()
-        print(f"Normalized Query: {normalized_query}")
 
         # Try to find a matching UserInput (compare normalized versions)
         try:
@@ -36,54 +36,21 @@ def search_view(request):
             user_input = None
 
         if user_input:
-            # If match found, fetch its recommendations
             results = user_input.recommendations.all()
         else:
-            # Load environment variables from the .env file
-            load_dotenv()
 
-            # Retrieve the API token from the environment
-            api_token = os.getenv("API_TOKEN")
+            load_dotenv(dotenv_path=".env")
 
-            # Make the first POST request to get the event_id
-            url = "https://nalzero-adet.hf.space/gradio_api/call/predict"
-            headers = {
-                "Authorization": f"Bearer {api_token}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "data": [
-                    {
-                        "query_text": query
-                    }
-                ]
-            }
+            # ✅ Check if variables are loaded
+            API_TOKEN = os.getenv("API_TOKEN")
 
-            response = requests.post(url, headers=headers, json=payload)
-
-            if response.status_code == 200:
-                # Get the event_id from the response
-                event_id = response.json().get("event_id")
-
-                if event_id:
-                    # Now make a GET request with the event_id
-                    get_url = f"https://nalzero-adet.hf.space/gradio_api/call/predict/{event_id}"
-                    get_response = requests.get(get_url, headers=headers)
-
-                    if get_response.status_code == 200:
-                        # Process the prediction result from the GET request
-                        results = get_response.json().get('data', [])
-                    else:
-                        print(f"Failed to get results: {get_response.text}")
-                else:
-                    print("No event_id returned.")
-            else:
-                print(f"POST request failed: {response.text}")
-
-            # Optionally, save the results to the database
+            results = call_gradio_api(query, API_TOKEN)
             save_results_to_db(query, results)
 
-    return render(request, 'recommendation_system/results.html', {'results': results, 'query': query})
+    return render(request, 'recommendation_system/results.html', {
+        'results': results,
+        'query': query
+    })
 
 def save_results_to_db(query_text, results):
     user_input = UserInput.objects.create(query_text=query_text)
@@ -130,3 +97,54 @@ def input_recommendations_view(request):
         'page_obj': page_obj  # Pass the pagination object to the template
     })
 
+def call_gradio_api(query_text, api_token):
+    post_url = "https://nalzero-adet.hf.space/gradio_api/call/predict"
+    headers = {
+        "Authorization": api_token,
+        "Content-Type": "application/json"
+    }
+
+    try:
+        # POST request
+        response = requests.post(
+            post_url,
+            json={"data": [query_text]},
+            headers=headers,
+            timeout=10
+        )
+        response.raise_for_status()
+
+        event_id = response.json().get('event_id')
+        if not event_id:
+            return {"error": "No event_id in response"}
+
+        # GET request
+        get_url = f"{post_url}/{event_id}"
+        with requests.get(
+            get_url,
+            headers=headers,
+            stream=True,
+            timeout=30
+        ) as get_response:
+            get_response.raise_for_status()
+            
+            for line in get_response.iter_lines():
+                if line:
+                    try:
+                        decoded = line.decode('utf-8').strip()
+                        if decoded.startswith('data:'):
+                            json_str = decoded[5:].strip()
+                            if json_str:
+                                data = json.loads(json_str)
+                                # Extract the inner list of results
+                                if isinstance(data, list) and len(data) > 0:
+                                    return data[0]  # Return first (and only) list of results
+                    except (UnicodeDecodeError, json.JSONDecodeError):
+                        continue
+
+        return {"error": "No valid data received in SSE stream"}
+
+    except requests.exceptions.RequestException as e:
+        return {"error": f"API request failed: {str(e)}"}
+    except Exception as e:
+        return {"error": str(e)}

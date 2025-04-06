@@ -47,29 +47,26 @@
             {% for result in results %}
                 <li>
                     <h3>{{ result.title }}</h3>
+                    <p><strong>Source:</strong>{{result.source}}</p>
                     
-                    {% if result.source == "EXA" %}
-                        <p><strong>Source:</strong> EXA</p>
-                        <p><strong>🔗 URL:</strong> <a href="{{ result.url }}" target="_blank">View Paper</a></p>
-                    {% elif result.source == "Pinecone" %}
-                        <p><strong>Source:</strong> Pinecone</p>
-                        
-                        {% if result.abstract %}
-                            <p><strong>🔹 Abstract:</strong> {{ result.abstract }}</p>
-                        {% endif %}
-                        
-                        {% if result.authors %}
-                            <p><strong>🔹 Authors:</strong> {{ result.authors }}</p>
-                        {% endif %}
+                    {% if result.abstract %}
+                    <p><strong>🔹 Abstract:</strong> {{ result.abstract }}</p>
+                    {% endif %}
 
-                        {% if result.year %}
-                        <p><strong>🔹 Year:</strong> {{ result.year }}</p>
-                        {% endif %}
+                    {% if result.authors %}
+                    <p><strong>🔹 Authors:</strong> {{ result.authors }}</p>
+                    {% endif %}
 
+                    {% if result.year %}
+                    <p><strong>🔹 Year:</strong> {{ result.year }}</p>
+                    {% endif %}
+
+                    {% if recommendation.source == "Pinecone" %}
+                    <p><strong>🔹 Similarity Score:</strong> {{ recommendation.score }}</p>
                     {% endif %}
                     
-                    {% if result.source == "Pinecone" %}
-                    <p><strong>🔹 Similarity Score:</strong> {{ result.score }}</p>
+                    {% if result.url %}
+                    <p><strong>🔗 URL:</strong> <a href="{{ result.url }}" target="_blank">View Paper</a></p>
                     {% endif %}
 
                     <hr>

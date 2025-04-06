@@ -84,15 +84,23 @@
                                 {% if recommendation.abstract %}
                                     <p><strong>Abstract:</strong> {{ recommendation.abstract }}</p>
                                 {% endif %}
-                                {% if recommendation.url %}
-                                    <p><strong>URL:</strong> <a href="{{ recommendation.url }}" target="_blank">{{ recommendation.url }}</a></p>
+
+                                {% if result.authors %}
+                                <p><strong>🔹 Authors:</strong> {{ result.authors }}</p>
                                 {% endif %}
-                                {% if recommendation.year %}
-                                    <p><strong>Year:</strong> {{ recommendation.year }}</p>
+            
+                                {% if result.year %}
+                                <p><strong>🔹 Year:</strong> {{ result.year }}</p>
                                 {% endif %}
+            
                                 {% if recommendation.source == "Pinecone" %}
                                 <p><strong>🔹 Similarity Score:</strong> {{ recommendation.score }}</p>
                                 {% endif %}
+
+                                {% if recommendation.url %}
+                                <p><strong>URL:</strong> <a href="{{ recommendation.url }}" target="_blank">{{ recommendation.url }}</a></p>
+                                {% endif %}
+
                             </div>
                         {% endfor %}
                     </div>
