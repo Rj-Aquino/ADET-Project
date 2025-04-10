@@ -69,22 +69,24 @@ def save_results_to_db(query_text, results):
     return user_input
 
 def input_recommendations_view(request):
-    # Ensure the query always fetches the latest data
-    inputs = UserInput.objects.all().order_by('-created_at')  # Order by creation time (newest first)
-
+    # Get the current page number from the GET request
+    page_number = request.GET.get('page')
+    
+    # Get a paginated queryset of UserInput (instead of fetching all data first)
+    inputs = UserInput.objects.all().order_by('-created_at')
+    
     # Create a paginator object for the inputs
-    paginator = Paginator(inputs, 1)  # Show 1 inputs per page
-    page_number = request.GET.get('page')  # Get the current page number from the GET request
+    paginator = Paginator(inputs, 1)  # 1 input per page
     page_obj = paginator.get_page(page_number)  # Get the current page
-
+    
     # Create an empty list to store inputs and their recommendations
     input_recommendations = []
 
-    # Loop through each user input on the current page and get corresponding recommendations from the database
+    # Loop through each user input on the current page and get corresponding recommendations
     for user_input in page_obj:
-        # Get the recommendations from the ResearchPaper model that correspond to the current user_input
+        # Instead of fetching all recommendations, fetch only the ones needed for the current user_input
         recommendations = ResearchPaper.objects.filter(input=user_input)
-
+        
         # Add the input and its corresponding recommendations to the list
         input_recommendations.append({
             'user_input': user_input,
