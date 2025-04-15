@@ -21,6 +21,6 @@ from django.http import HttpResponse
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("recommendation_system.urls")),
-    path('', lambda request: HttpResponse("✅ ADET is running!")),
+    path('', lambda request: HttpResponse("ADET is running!")),
 
 ]

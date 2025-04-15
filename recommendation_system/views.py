@@ -17,7 +17,7 @@ import ast
 # Home view to display the search form
 def home(request):
     form = SearchForm()
-    return render(request, 'recommendation_system/home.html', {'form': form})
+    return render(request, 'home.html', {'form': form})
 
 def search_view(request):
     query = request.GET.get('query', '')

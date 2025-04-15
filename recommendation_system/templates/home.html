@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home-wrapper">
+<div class="home-label">HOME PAGE</div>
+<div class="home-page">
+    <h2>HELLO, USER</h2>
+    <h3>WHAT DO YOU WANT TO DO TODAY?</h3>
+    
+    <div class="action-cards">
+        <div class="card">
+            <h4>RECOMMENDATIONS</h4>
+            <p>LET'S FIND RELEVANT LITERATURES FOR YOUR STUDY!</p>
+            <a href="" class="btn">Search Recommendations</a>
+        </div>
+
+        <div class="card">
+            <h4>HISTORY</h4>
+            <p>LET'S REVIEW YOUR HISTORY OF RECOMMENDED LITERATURES!</p>
+            <a href="" class="btn">View History</a>
+        </div>
+
+        <div class="card">
+            <h4>PROFILE</h4>
+            <p>LET'S CHANGE YOUR PROFILE DETAILS OR LOG OUT FOR TODAY!</p>
+            <a href="" class="btn">Manage Profile</a>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
