@@ -14,9 +14,11 @@
         <h1>Research Paper Recommender</h1>
         <nav>
             <ul class="navbar">
-                <li><a href="{% url 'home' %}">HOME</a></li>
+                <li><a href="{% url 'home' %}" class= "{% if active_page == 'home' %}active{% endif %}">HOME</a></li>
                 <li><a href="">RECOMMENDATIONS</a></li>
-                <li><a href="">HISTORY</a></li>
+             
+                <li><a href="{% url 'history' %}" class="{% if active_page == 'history' %}active{% endif %}">HISTORY</a></li>
+               
                 <li class="profile-item">
                     <a href="">
                         <img src="{% static 'images/profile-icon.png' %}" alt="Profile" class="profile-icon">

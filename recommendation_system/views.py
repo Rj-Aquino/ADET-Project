@@ -16,8 +16,16 @@ import ast
 
 # Home view to display the search form
 def home(request):
-    form = SearchForm()
-    return render(request, 'home.html', {'form': form})
+    return render(request, 'home.html', {'active_page': 'home'})
+
+def history(request):
+    return render(request, 'history.html')
+
+def pinecone(request):
+    return render(request, 'pinecone.html', {'active_page': 'history'})
+
+def exa(request):
+    return render(request, 'exa.html', {'active_page': 'history'})
 
 def search_view(request):
     query = request.GET.get('query', '')

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/history.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="header-section">
+        <h2>INPUT RECOMMENDATIONS</h2>
+    </div>
+
+    <div class="recommendations-container">
+        <!-- Left Column -->
+        <div class="recommendation-column">
+            <div class="recommendation-card">
+                <h3>TITLE</h3>
+                <p>ABSTRACT</p>
+            </div>
+            <div class="navigation-buttons">
+                <a href="{% url 'pinecone' %}" class="nav-button">PINECONE</a>
+                <a href="{% url 'exa' %}" class="nav-button">EXA</a>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="recommendation-column">
+            <div class="recommendation-card">
+                <h3>TITLE</h3>
+                <p>ABSTRACT</p>
+            </div>
+            <div class="navigation-buttons">
+                <a href="{% url 'pinecone' %}" class="nav-button">PINECONE</a>
+                <a href="{% url 'exa' %}" class="nav-button">EXA</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <a href="#" class="pagination-button">PREVIOUS</a>
+        <a href="#" class="pagination-button">NEXT</a>
+    </div>
+</div>
+{% endblock %}
