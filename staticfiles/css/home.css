@@ -1,0 +1,105 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #24368f;
+    color: white;
+}
+
+.home-wrapper {
+    position: relative;
+    width: fit-content; /* or 100% if you want full width */
+    margin: 0 auto;
+}
+
+.home-label {
+    position: absolute;
+    top: -37px;
+    left: 40px; /* adjust this based on your desired alignment */
+    background-color: #d4b44c;
+    font-size: 1.3rem;
+    color: black;
+    z-index: -1;
+    font-weight: bold;
+    font-family: 'IrishGrover-Regular';
+    padding: 10px 25px;
+    border-radius: 30px 30px 0 0;
+}
+
+.home-page {
+    background-color: #f39c12;
+    margin-top: 50px;
+    padding: 40px 40px 40px 40px;
+    max-width: 900px;
+    border-radius: 60px;
+    text-align: center;
+    color: white;
+}
+
+.home-page h2 {
+    font-size: 3rem;
+    font-family: 'Fantasy', cursive;
+    color: white;
+    font-family: 'IrishGrover-Regular';
+}
+
+.home-page h3 {
+    font-size: 1.8rem;
+    margin: 10px 0 30px;
+    color: white;
+}
+
+/* Card Section */
+.action-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #24368f;
+    padding: 20px;
+    border-radius: 30px;
+    width: 250px;
+    text-align: center;
+    color: white;
+}
+
+.card h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+    font-family: 'IstokWeb-Bold';
+}
+
+.card p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    color: white;
+    font-family: 'IstokWeb-Regular';
+}
+
+/* Card Buttons */
+.btn {
+    background-color: white;
+    color: #24368f;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #d4b44c;
+    color: black;
+}

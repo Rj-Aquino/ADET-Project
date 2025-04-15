@@ -1,0 +1,101 @@
+/* style.css */
+
+/* Reset & Fonts */
+
+@font-face {
+    font-family: 'IstokWeb-Bold';
+    src: url('../fonts/IstokWeb-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'IstokWeb-Regular';
+    src: url('../fonts/IstokWeb-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'IrishGrover-Regular';
+    src: url('../fonts/IrishGrover-Regular.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #24368f;
+    color: white;
+}
+
+/* Header / Navbar */
+header {
+    background-color: #f39c12;
+    border-radius: 60px;
+    margin: 20px;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 75px;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+    font-family: 'IrishGrover-Regular';
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav ul.navbar {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    gap: 20px;
+    align-items: center;
+}
+
+nav ul.navbar .profile-item {
+    margin-left: auto;
+}
+
+/* Exclude profile icon link from nav link styles */
+nav ul li.profile-item a {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+nav ul li a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background-color: #d4b44c;
+    font-family: 'IrishGrover-Regular';
+}
+
+nav ul li a.active {
+    background-color: #f4d35e;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+    transform: scale(1.1);
+}

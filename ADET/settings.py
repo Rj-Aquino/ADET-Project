@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ SECRET_KEY = 'django-insecure-_9*0@zv#ia)d#d!=&s*%hl_&=$nzj3l_tjzmp)o$186x8-6z_5
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True  # Disable debug mode in production!
+DEBUG = False  # Disable debug mode in production!
 ALLOWED_HOSTS = [
     "adet-project-production.up.railway.app",  # ✅ Your Railway domain
     "localhost",
@@ -146,6 +147,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'recommendation_system' / 'static',
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
