@@ -7,39 +7,36 @@
 
 {% block content %}
 <div class="wrapper">
-    <div class="header-section">
-        <h2>INPUT RECOMMENDATIONS</h2>
-    </div>
-
-    <div class="recommendations-container">
-        <!-- Left Column -->
-        <div class="recommendation-column">
-            <div class="recommendation-card">
-                <h3>TITLE</h3>
-                <p>ABSTRACT</p>
-            </div>
-            <div class="navigation-buttons">
-                <a href="{% url 'pinecone' %}" class="nav-button">PINECONE</a>
-                <a href="{% url 'exa' %}" class="nav-button">EXA</a>
-            </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="recommendation-column">
-            <div class="recommendation-card">
-                <h3>TITLE</h3>
-                <p>ABSTRACT</p>
-            </div>
-            <div class="navigation-buttons">
-                <a href="{% url 'pinecone' %}" class="nav-button">PINECONE</a>
-                <a href="{% url 'exa' %}" class="nav-button">EXA</a>
-            </div>
+    <div class="recommendation-header">Input Recommendations</div>
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">Previous</a>
+            {% endif %}
+            <span class="page-btn">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="page-btn">Next</a>
+            {% endif %}
         </div>
     </div>
+    <div class="recommendation-container">
 
-    <div class="pagination">
-        <a href="#" class="pagination-button">PREVIOUS</a>
-        <a href="#" class="pagination-button">NEXT</a>
+        <div class="recommendation-cards">
+            {% for item in input_recommendations %}
+            <div class="recommendation-card">
+                <div class="rec-title">{{ item.query_text }}</div>
+                <div class="rec-abstract">Submitted at: {{ item.created_at }}</div>
+                <div class="rec-source">
+                    <a href="{% url 'pinecone' %}?input_id={{ item.id }}&page={{ page_obj.number }}" class="nav-button">PINECONE</a>
+                    <a href="{% url 'exa' %}?input_id={{ item.id }}&page={{ page_obj.number }}" class="nav-button">EXA</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="recommendation-card">
+                <div class="rec-title">No input history found.</div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
+
 {% endblock %}

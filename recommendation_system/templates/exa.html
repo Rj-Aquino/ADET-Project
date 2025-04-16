@@ -7,50 +7,32 @@
 
 {% block content %}
 <div class="wrapper">
+    <a href="{% url 'history' %}?page={{ page }}" class="home-label">RETURN TO HISTORY</a>
     <div class="navigation-buttons">
-        <a href="{% url 'pinecone' %}" class="nav-button">PINECONE</a>
-        <a href="{% url 'exa' %}" class="nav-button active">EXA</a>
+        <a href="{% url 'pinecone' %}?input_id={{ user_input.id }}&page={{ page }}" class="nav-button ">PINECONE</a>
+        <a href="{% url 'exa' %}?input_id={{ user_input.id }}&page={{ page }}" class="nav-button active">EXA</a>
     </div>
 
     <div class="history-page">
         <div class="action-cards">
             
-            <!-- First Recommendation -->
-            <div class="card">
-                <h4>Efficient Vector Similarity for Large-Scale AI Systems</h4>
-                <p><strong>Authors:</strong> A. Smith, B. Taylor</p>
-                <p><strong>Year:</strong> 2023</p>
-                <p><strong>URL:</strong>Sample URL</p>
-            </div>
+            {% if papers %}
+                {% for paper in papers %}
+                    <div class="card">
+                        <h4>{{ paper.title|default:"No title available" }}</h4>
+                        <p><strong>Authors:</strong> {{ paper.authors|default:"N/A" }}</p>
+                        <p><strong>Year:</strong> {{ paper.year|default:"N/A" }}</p>
+                        <p><strong>URL:</strong> 
+                            <a href="{{ paper.url|default:'#' }}" target="_blank">
+                                {{ paper.url|default:"No URL available" }}
+                            </a>
+                        </p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No EXA results found for this input.</p>
+            {% endif %}
 
-            <!-- Second Recommendation -->
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>URL:</strong>Sample URL</p>
-            </div>
-
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>URL:</strong>Sample URL</p>
-            </div>
-
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>URL:</strong>Sample URL</p>
-            </div>
-
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>URL:</strong>Sample URL</p>
-            </div>
         </div>
     </div>
 </div>

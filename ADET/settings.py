@@ -89,23 +89,23 @@ WSGI_APPLICATION = 'ADET.wsgi.application'
 
 DATABASES = {
 
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ADET-Project',          # same as in DBeaver
-        'USER': 'postgres',    # usually 'postgres'
-        'PASSWORD': 'password',
-        'HOST': 'localhost',             # or the IP if it's remote
-        'PORT': '5432',                  # default PostgreSQL port
-    }
-
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': "railway",     # Railway provides this
-    #     'USER': "postgres",         # Railway provides this
-    #     'PASSWORD': "bBNuODwqJaAtyCFsLHvEnIDRWQZTDipb",  # Railway provides this
-    #     'HOST': "yamabiko.proxy.rlwy.net",         # Railway provides this
-    #     'PORT': "19259",         # Railway provides this
+    #     'NAME': 'ADET-Project',          # same as in DBeaver
+    #     'USER': 'postgres',    # usually 'postgres'
+    #     'PASSWORD': 'password',
+    #     'HOST': 'localhost',             # or the IP if it's remote
+    #     'PORT': '5432',                  # default PostgreSQL port
     # }
+
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': "railway",     # Railway provides this
+        'USER': "postgres",         # Railway provides this
+        'PASSWORD': "bBNuODwqJaAtyCFsLHvEnIDRWQZTDipb",  # Railway provides this
+        'HOST': "yamabiko.proxy.rlwy.net",         # Railway provides this
+        'PORT': "19259",         # Railway provides this
+    }
 }
 
 # Password validation

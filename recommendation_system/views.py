@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import SearchForm
 #from .search import enhanced_search  # Assuming you have a search.py file with enhanced_search function
 from .models import UserInput, ResearchPaper
@@ -10,22 +10,72 @@ import requests
 from django.shortcuts import render
 from dotenv import load_dotenv
 import os
-import time
 import json
-import ast
 
 # Home view to display the search form
 def home(request):
     return render(request, 'home.html', {'active_page': 'home'})
 
 def history(request):
-    return render(request, 'history.html')
+    # Get current page number from the query string (?page=)
+    page_number = request.GET.get('page', 1)
+
+    # Query only what we need, ordered by most recent
+    inputs_queryset = UserInput.objects.all().order_by('-created_at')
+
+    # Paginate the queryset (e.g., 5 per page)
+    paginator = Paginator(inputs_queryset, 2)
+    page_obj = paginator.get_page(page_number)  # safely handles invalid page numbers
+
+    return render(request, 'history.html', {
+        'input_recommendations': page_obj.object_list,  # only current page's items
+        'page_obj': page_obj,  # used for pagination controls
+        'active_page': 'history',
+    })
 
 def pinecone(request):
-    return render(request, 'pinecone.html', {'active_page': 'history'})
+    user_input_id = request.GET.get('input_id')
+    page = request.GET.get('page', 1)  # Get the page number from the query string
+
+    if not user_input_id:
+        return render(request, 'pinecone.html', {
+            'active_page': 'history',
+            'error': 'No input selected.',
+            'papers': [],
+            'page': page 
+        })
+
+    user_input = get_object_or_404(UserInput, id=user_input_id)
+    pinecone_papers = ResearchPaper.objects.filter(input=user_input, source='Pinecone')
+
+    return render(request, 'pinecone.html', {
+        'active_page': 'history',
+        'user_input': user_input,
+        'papers': pinecone_papers,
+        'page': page  
+    })
 
 def exa(request):
-    return render(request, 'exa.html', {'active_page': 'history'})
+    user_input_id = request.GET.get('input_id')
+    page = request.GET.get('page', 1)  # Get the page number from the query string
+
+    if not user_input_id:
+        return render(request, 'exa.html', {
+            'active_page': 'history',
+            'error': 'No input selected.',
+            'papers': [],
+            'page': page  
+        })
+
+    user_input = get_object_or_404(UserInput, id=user_input_id)
+    exa_papers = ResearchPaper.objects.filter(input=user_input, source='Exa')
+
+    return render(request, 'exa.html', {
+        'active_page': 'history',
+        'user_input': user_input,
+        'papers': exa_papers,
+        'page': page  
+    })
 
 def search_view(request):
     query = request.GET.get('query', '')
@@ -75,37 +125,6 @@ def save_results_to_db(query_text, results):
             source=result.get('source')
         )
     return user_input
-
-def input_recommendations_view(request):
-    # Get the current page number from the GET request
-    page_number = request.GET.get('page')
-    
-    # Get a paginated queryset of UserInput (instead of fetching all data first)
-    inputs = UserInput.objects.all().order_by('-created_at')
-    
-    # Create a paginator object for the inputs
-    paginator = Paginator(inputs, 1)  # 1 input per page
-    page_obj = paginator.get_page(page_number)  # Get the current page
-    
-    # Create an empty list to store inputs and their recommendations
-    input_recommendations = []
-
-    # Loop through each user input on the current page and get corresponding recommendations
-    for user_input in page_obj:
-        # Instead of fetching all recommendations, fetch only the ones needed for the current user_input
-        recommendations = ResearchPaper.objects.filter(input=user_input)
-        
-        # Add the input and its corresponding recommendations to the list
-        input_recommendations.append({
-            'user_input': user_input,
-            'recommendations': recommendations
-        })
-
-    # Render the template with input_recommendations context and pagination info
-    return render(request, 'recommendation_system/inputs_recommendations.html', {
-        'input_recommendations': input_recommendations,
-        'page_obj': page_obj  # Pass the pagination object to the template
-    })
 
 def call_gradio_api(query_text, api_token):
     post_url = "https://nalzero-adet.hf.space/gradio_api/call/predict"

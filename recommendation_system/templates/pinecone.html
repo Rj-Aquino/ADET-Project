@@ -7,55 +7,28 @@
 
 {% block content %}
 <div class="wrapper">
+    <a href="{% url 'history' %}?page={{ page }}" class="home-label">RETURN TO HISTORY</a>
     <div class="navigation-buttons">
-        <a href="{% url 'pinecone' %}" class="nav-button active">PINECONE</a>
-        <a href="{% url 'exa' %}" class="nav-button">EXA</a>
+        <a href="{% url 'pinecone' %}?input_id={{ user_input.id }}&page={{ page }}" class="nav-button active">PINECONE</a>
+        <a href="{% url 'exa' %}?input_id={{ user_input.id }}&page={{ page }}" class="nav-button">EXA</a>
     </div>
 
     <div class="history-page">
         <div class="action-cards">
-            
-            <!-- First Recommendation -->
-            <div class="card">
-                <h4>Efficient Vector Similarity for Large-Scale AI Systems</h4>
-                <p><strong>Authors:</strong> A. Smith, B. Taylor</p>
-                <p><strong>Year:</strong> 2023</p>
-                <p><strong>Similarity Score:</strong> 0.92</p>
-                <p><strong>Abstract:</strong> This study explores optimized similarity computations in distributed vector databases for fast retrieval in AI models.</p>
-            </div>
+            {% if papers %}
+                {% for paper in papers %}
+                    <div class="card">
+                        <h4>{{ paper.title }}</h4>
+                        <p><strong>Authors:</strong> {{ paper.authors|default:"N/A" }}</p>
+                        <p><strong>Year:</strong> {{ paper.year|default:"N/A" }}</p>
+                        <p><strong>Similarity Score:</strong> {{ paper.score }}</p>
+                        <p><strong>Abstract:</strong> {{ paper.abstract|default:"No abstract available." }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No Pinecone results found for this input.</p>
+            {% endif %}
 
-            <!-- Second Recommendation -->
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>Similarity Score:</strong> 0.89</p>
-                <p><strong>Abstract:</strong> This study explores optimized similarity computations in distributed vector databases for fast retrieval in AI models.</p>
-            </div>
-
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>Similarity Score:</strong> 0.89</p>
-                <p><strong>Abstract:</strong> This study explores optimized similarity computations in distributed vector databases for fast retrieval in AI models.</p>
-            </div>
-
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>Similarity Score:</strong> 0.89</p>
-                <p><strong>Abstract:</strong> This study explores optimized similarity computations in distributed vector databases for fast retrieval in AI models.</p>
-            </div>
-
-            <div class="card">
-                <h4>Scalable Search with Pinecone and Dense Vectors</h4>
-                <p><strong>Authors:</strong> J. Doe, M. Lin</p>
-                <p><strong>Year:</strong> 2022</p>
-                <p><strong>Similarity Score:</strong> 0.89</p>
-                <p><strong>Abstract:</strong> This study explores optimized similarity computations in distributed vector databases for fast retrieval in AI models.</p>
-            </div>
         </div>
     </div>
 </div>
