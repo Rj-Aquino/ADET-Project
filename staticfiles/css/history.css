@@ -1,61 +1,112 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #24368f;
-    color: white;
+/* Main container */
+.recommendation-container {
+    background-color: #f39c12;
+    padding: 30px;
+    margin: 0 auto;
+    width: 90%;
+    border-radius: 60px;
 }
 
 .wrapper {
-    max-width: 1200px;
+    position: relative; /* Ensure the wrapper is the positioning context */
+    width: fit-content; /* or 100% if you want full width */
     margin: 0 auto;
-    text-align: center;
 }
 
-.header-section h2 {
-    font-size: 1.8rem;
+/* Header */
+.recommendation-header {
+    position: absolute;
+    top: -37px;
+    right: 350px;
+    background-color: #d4b44c;
+    font-size: 1.3rem;
+    color: black;
+    z-index: -1;
+    font-weight: bold;
     font-family: 'IrishGrover-Regular';
-    color: #d4b44c;
-    margin-bottom: 20px;
+    padding: 10px 25px;
+    border-radius: 30px 30px 0 0;
+    white-space: nowrap;
 }
 
-.recommendations-container {
+.recommendation-header h2 {
+    font-family: 'IrishGrover-Regular';
+    font-size: 1.8rem;
+    color: black;
+}
+
+/* Pagination Buttons */
+.pagination-controls  {
+    position: absolute; /* Position the buttons relative to the wrapper */
+    top: -43px; /* Move the buttons behind the container */
+    left: 200px; /* Align the buttons to the leftmost part */
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: 10px; /* Add spacing between buttons */
+    z-index: 1;
 }
 
-.recommendation-column {
-    flex: 1;
+.page-btn {
+    background-color: #d4b44c;
+    color: black;
+    text-decoration: none;
+    padding: 10px 30px;
+    border-radius: 30px 30px 0 0; /* Rounded top corners for tab-like appearance */
+    font-family: 'IrishGrover-Regular';
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-bottom: none;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.page-btn:hover {
+    background-color: #f4d35e;
+}
+
+span.page-btn:hover {
+    background-color: #d4b44c;
+}
+
+/* Cards container */
+.recommendation-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+/* Individual card */
+.recommendation-card {
+    background-color: #24368f;
+    border-radius: 40px;
+    padding: 30px;
+    width: 45%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
 }
 
-.recommendation-card {
-    background-color: #f39c12;
+/* Card inner styles */
+.rec-title, .rec-abstract {
+    background-color: #d4b44c;
     border-radius: 30px;
     padding: 20px;
-    width: 90%;
+    font-weight: bold;
     text-align: center;
-    color: black;
-    font-family: 'IstokWeb-Regular';
+    color: white;
 }
 
-.recommendation-card h3 {
-    font-size: 1.5rem;
-    font-family: 'IstokWeb-Bold';
-    margin-bottom: 10px;
-}
-
-.recommendation-card p {
+.rec-abstract {
     font-size: 1rem;
 }
 
-.navigation-buttons {
+.rec-source {
     display: flex;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-around;
+    border-radius: 30px;
+    padding: 15px 0;
 }
 
 .nav-button {
@@ -63,36 +114,14 @@ body {
     color: black;
     text-decoration: none;
     padding: 10px 25px;
-    border-radius: 30px;
+    border-radius: 30px 30px 30px 30px; /* Rounded top corners for tab-like appearance */
     font-family: 'IrishGrover-Regular';
     font-size: 1.2rem;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-button:hover {
     background-color: #f4d35e;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.pagination-button {
-    background-color: #d4b44c;
-    color: black;
-    text-decoration: none;
-    padding: 10px 25px;
-    border-radius: 30px;
-    font-family: 'IrishGrover-Regular';
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.pagination-button:hover {
-    background-color: #f4d35e;
-}
